@@ -12,70 +12,79 @@ import {
     View,
     TextInput,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    ListView
 } from 'react-native';
+import _ from 'lodash';
 
 const {height, width} = Dimensions.get('window');
-class CreateButton extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {myButtonOpacity: 1}
-    }
-
-    render() {
-        return (
-            <TouchableOpacity onPress={() => this.setState({myButtonOpacity: 0.1})}
-                              onPressOut={() => this.setState({myButtonOpacity: 1})}>
-                <View style={[styles.button, {opacity: this.state.myButtonOpacity}]}>
-                    <Text>Press me!</Text>
-                </View>
-            </TouchableOpacity>
-        )
-    }
-}
 
 export default class TodoList extends Component {
     constructor(props) {
         super(props);
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            inputText: 'What are you up to...',
-            toDos: []
+            inputText: '',
+            items: [{text: 'firstTodo', isDone: false}],
+            rows: ds.cloneWithRows([])
         }
     }
 
-    handleClick() {
+    addTodo() {
+        const toDoItem = {
+            text: this.state.inputText,
+            isDone: false
+        };
+        const items = this.state.items.concat(toDoItem);
+        this.setState({inputText: '', items});
         this.textInput.focus();
-        this.setState({inputText: ''});
+    }
+
+    getDataSource() {
+        return this.state.rows.cloneWithRows(this.state.items);
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
-                    Todo List
+                    ToDo List
                 </Text>
                 <View style={styles.textInputContainer}>
                     <TextInput
                         ref={(input) => this.textInput = input}
+                        placeholder='What are you up to...'
                         style={styles.textInput}
                         onChangeText={(inputText) => this.setState({inputText})}
                         value={this.state.inputText}
                     />
-                    <TouchableOpacity onPress={() =>{
-                        this.handleClick();
+                    <TouchableOpacity onPress={() => {
+                        this.addTodo();
                     }}>
                         <View style={styles.button}>
                             <Text style={styles.buttonText}>+</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.instructions}>
-                    To get started, edit index.ios.js
-                </Text>
-                <Text style={styles.instructions}>
-                    Press Cmd+R to reload,{'\n'}
-                    Cmd+D or shake for dev menu
-                </Text>
+                <ListView
+                    dataSource={this.getDataSource()}
+                    renderRow={(rowData) =>
+                        <View style={styles.itemRow}>
+                            <Text style={styles.listItemText}>{rowData.text}</Text>
+                            <TouchableOpacity onPress={()=> {
+                                const items = this.state.items;
+                                const index = _.findIndex(items, {text: rowData.text});
+                                items.splice(index, 1);
+                                this.setState({items});
+                            }}>
+                                <View style={styles.iconContainer}>
+                                    <Text style={styles.icon}>✖️</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+
+                    }
+                />
             </View>
         );
     }
@@ -123,7 +132,21 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 36,
         color: 'white'
-    }
+    },
+    itemRow: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    listItemText: {},
+    iconContainer: {
+        height: 24,
+        width: 24,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    icon: {fontSize: 12}
 });
 
 AppRegistry.registerComponent('TodoList', () => TodoList);
