@@ -80,7 +80,7 @@ class ToDoItem extends Component {
     render() {
         return (
             <View style={styles.itemRow}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => this.props.check(this.props.rowID)}>
                     {this.renderCheck(this.props.toDoItem.isDone)}
                 </TouchableOpacity>
                 {this.renderText(this.props.toDoItem.isDone)}
@@ -129,6 +129,12 @@ export default class TodoList extends Component {
         this.setState({items});
     }
 
+    check(index) {
+        const items = this.state.items;
+        items[index].isDone = !items[index].isDone;
+        this.setState({items});
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -143,7 +149,8 @@ export default class TodoList extends Component {
                 <ListView
                     dataSource={this.getDataSource()}
                     renderRow={(rowData, sectionID, rowID) =>
-                        <ToDoItem toDoItem={rowData} rowID={rowID} delete={this.delete.bind(this)}/>
+                        <ToDoItem toDoItem={rowData} rowID={rowID}
+                                  delete={this.delete.bind(this)} check={this.check.bind(this)}/>
                     }
                 />
             </View>
