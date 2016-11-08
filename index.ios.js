@@ -46,7 +46,7 @@ class ToDoInput extends Component {
 }
 
 class ToDoItem extends Component {
-    renderItem(checked) {
+    renderCheck(checked) {
         if (checked) {
             return (
                 <View style={[styles.iconContainer, {backgroundColor: 'grey', borderWidth: 1, borderColor: 'black'}]}>
@@ -60,6 +60,19 @@ class ToDoItem extends Component {
         );
     }
 
+    renderText(checked) {
+        if (!checked) {
+            return (
+                <Text
+                    style={styles.listItemText}>{parseInt(this.props.rowID) + 1}.&nbsp;{this.props.toDoItem.text}</Text>
+            );
+        }
+        return (
+            <Text
+                style={[styles.listItemText, {textDecorationLine: 'line-through'}]}>{parseInt(this.props.rowID) + 1}.&nbsp;{this.props.toDoItem.text}</Text>
+        );
+    }
+
     deleteSelf() {
         return this.props.delete(this.props.rowID);
     }
@@ -68,10 +81,9 @@ class ToDoItem extends Component {
         return (
             <View style={styles.itemRow}>
                 <TouchableOpacity>
-                    {this.renderItem(this.props.toDoItem.isDone)}
+                    {this.renderCheck(this.props.toDoItem.isDone)}
                 </TouchableOpacity>
-                <Text
-                    style={styles.listItemText}>{parseInt(this.props.rowID) + 1}.&nbsp;{this.props.toDoItem.text}</Text>
+                {this.renderText(this.props.toDoItem.isDone)}
                 <TouchableOpacity onPress={this.deleteSelf.bind(this)}>
                     <View style={styles.iconContainer}>
                         <Text style={styles.icon}>✖️</Text>
