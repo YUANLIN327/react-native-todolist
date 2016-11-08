@@ -173,12 +173,13 @@ const styles = StyleSheet.create({
     },
     itemRow: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
+        width:width*0.9,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop:20
     },
     listItemText: {
-        marginLeft: 20,
-        marginRight: 20
+        fontSize:18
     },
     iconContainer: {
         height: 24,
