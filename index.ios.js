@@ -66,7 +66,7 @@ class ToDoItem extends Component {
                 <TouchableOpacity>
                     {this.renderItem(this.props.toDoItem.isDone)}
                 </TouchableOpacity>
-                <Text style={styles.listItemText}>{this.props.toDoItem.text}</Text>
+                <Text style={styles.listItemText}>{parseInt(this.props.rowID) + 1}.&nbsp;{this.props.toDoItem.text}</Text>
                 <TouchableOpacity>
                     <View style={styles.iconContainer}>
                         <Text style={styles.icon}>✖️</Text>
@@ -119,8 +119,8 @@ export default class TodoList extends Component {
                 />
                 <ListView
                     dataSource={this.getDataSource()}
-                    renderRow={(rowData) =>
-                        <ToDoItem toDoItem={rowData}/>
+                    renderRow={(rowData, sectionID, rowID) =>
+                        <ToDoItem toDoItem={rowData} rowID={rowID}/>
                     }
                 />
             </View>
@@ -173,13 +173,13 @@ const styles = StyleSheet.create({
     },
     itemRow: {
         flexDirection: 'row',
-        width:width*0.9,
+        width: width * 0.9,
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop:20
+        marginTop: 20
     },
     listItemText: {
-        fontSize:18
+        fontSize: 18
     },
     iconContainer: {
         height: 24,
