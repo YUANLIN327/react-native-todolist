@@ -60,14 +60,19 @@ class ToDoItem extends Component {
         );
     }
 
+    deleteSelf() {
+        return this.props.delete(this.props.rowID);
+    }
+
     render() {
         return (
             <View style={styles.itemRow}>
                 <TouchableOpacity>
                     {this.renderItem(this.props.toDoItem.isDone)}
                 </TouchableOpacity>
-                <Text style={styles.listItemText}>{parseInt(this.props.rowID) + 1}.&nbsp;{this.props.toDoItem.text}</Text>
-                <TouchableOpacity>
+                <Text
+                    style={styles.listItemText}>{parseInt(this.props.rowID) + 1}.&nbsp;{this.props.toDoItem.text}</Text>
+                <TouchableOpacity onPress={this.deleteSelf.bind(this)}>
                     <View style={styles.iconContainer}>
                         <Text style={styles.icon}>✖️</Text>
                     </View>
@@ -106,6 +111,12 @@ export default class TodoList extends Component {
         this.setState({inputText})
     }
 
+    delete(rowID) {
+        const items = this.state.items;
+        items.splice(rowID, 1);
+        this.setState({items});
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -120,7 +131,7 @@ export default class TodoList extends Component {
                 <ListView
                     dataSource={this.getDataSource()}
                     renderRow={(rowData, sectionID, rowID) =>
-                        <ToDoItem toDoItem={rowData} rowID={rowID}/>
+                        <ToDoItem toDoItem={rowData} rowID={rowID} delete={this.delete.bind(this)}/>
                     }
                 />
             </View>
