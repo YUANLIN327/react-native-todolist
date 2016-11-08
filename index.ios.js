@@ -43,6 +43,11 @@ export default class TodoList extends Component {
         }
     }
 
+    handleClick() {
+        this.textInput.focus();
+        this.setState({inputText: ''});
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -51,11 +56,14 @@ export default class TodoList extends Component {
                 </Text>
                 <View style={styles.textInputContainer}>
                     <TextInput
+                        ref={(input) => this.textInput = input}
                         style={styles.textInput}
                         onChangeText={(inputText) => this.setState({inputText})}
                         value={this.state.inputText}
                     />
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() =>{
+                        this.handleClick();
+                    }}>
                         <View style={styles.button}>
                             <Text style={styles.buttonText}>+</Text>
                         </View>
@@ -108,13 +116,13 @@ const styles = StyleSheet.create({
         height: 48,
         width: 48,
         backgroundColor: 'gray',
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center'
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
-    buttonText:{
-        fontSize:36,
-        color:'white'
+    buttonText: {
+        fontSize: 36,
+        color: 'white'
     }
 });
 
