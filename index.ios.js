@@ -19,6 +19,33 @@ import _ from 'lodash';
 
 const {height, width} = Dimensions.get('window');
 
+class ToDoInput extends Component {
+    add() {
+        this.textInput.focus();
+        return this.props.addTodo();
+    }
+
+    render() {
+        return (
+            <View style={styles.textInputContainer}>
+                <TextInput
+                    ref={(input) => this.textInput = input}
+                    placeholder='What are you up to...'
+                    style={styles.textInput}
+                    onChangeText={this.props.onChangeText}
+                    value={this.props.inputText}
+                />
+                <TouchableOpacity onPress={this.add.bind(this)}>
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>+</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+}
+
+
 export default class TodoList extends Component {
     constructor(props) {
         super(props);
@@ -37,11 +64,14 @@ export default class TodoList extends Component {
         };
         const items = this.state.items.concat(toDoItem);
         this.setState({inputText: '', items});
-        this.textInput.focus();
     }
 
     getDataSource() {
         return this.state.rows.cloneWithRows(this.state.items);
+    }
+
+    onChangeText(inputText) {
+        this.setState({inputText})
     }
 
     render() {
@@ -50,22 +80,11 @@ export default class TodoList extends Component {
                 <Text style={styles.welcome}>
                     ToDo List
                 </Text>
-                <View style={styles.textInputContainer}>
-                    <TextInput
-                        ref={(input) => this.textInput = input}
-                        placeholder='What are you up to...'
-                        style={styles.textInput}
-                        onChangeText={(inputText) => this.setState({inputText})}
-                        value={this.state.inputText}
-                    />
-                    <TouchableOpacity onPress={() => {
-                        this.addTodo();
-                    }}>
-                        <View style={styles.button}>
-                            <Text style={styles.buttonText}>+</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                <ToDoInput ref={(input) =>this.textInput = input}
+                           inputText={this.state.inputText}
+                           onChangeText={this.onChangeText.bind(this)}
+                           addTodo={this.addTodo.bind(this)}
+                />
                 <ListView
                     dataSource={this.getDataSource()}
                     renderRow={(rowData) =>
