@@ -45,6 +45,38 @@ class ToDoInput extends Component {
     }
 }
 
+class ToDoItem extends Component {
+    renderItem(checked) {
+        if (checked) {
+            return (
+                <View style={[styles.iconContainer, {backgroundColor: 'grey', borderWidth: 1, borderColor: 'black'}]}>
+                    <Text style={styles.icon}>✔️</Text>
+                </View>
+            );
+        }
+        return (
+            <View style={[styles.iconContainer,
+                {backgroundColor: 'white', borderWidth: 1, borderColor: 'black'}]}></View>
+        );
+    }
+
+    render() {
+        return (
+            <View style={styles.itemRow}>
+                <TouchableOpacity>
+                    {this.renderItem(this.props.toDoItem.isDone)}
+                </TouchableOpacity>
+                <Text style={styles.listItemText}>{this.props.toDoItem.text}</Text>
+                <TouchableOpacity>
+                    <View style={styles.iconContainer}>
+                        <Text style={styles.icon}>✖️</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+}
+
 
 export default class TodoList extends Component {
     constructor(props) {
@@ -88,20 +120,7 @@ export default class TodoList extends Component {
                 <ListView
                     dataSource={this.getDataSource()}
                     renderRow={(rowData) =>
-                        <View style={styles.itemRow}>
-                            <Text style={styles.listItemText}>{rowData.text}</Text>
-                            <TouchableOpacity onPress={()=> {
-                                const items = this.state.items;
-                                const index = _.findIndex(items, {text: rowData.text});
-                                items.splice(index, 1);
-                                this.setState({items});
-                            }}>
-                                <View style={styles.iconContainer}>
-                                    <Text style={styles.icon}>✖️</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-
+                        <ToDoItem toDoItem={rowData}/>
                     }
                 />
             </View>
@@ -157,7 +176,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    listItemText: {},
+    listItemText: {
+        marginLeft: 20,
+        marginRight: 20
+    },
     iconContainer: {
         height: 24,
         width: 24,
