@@ -6,7 +6,7 @@ export class PageFour extends Component {
     render() {
         return (
             <View style={{margin: 128}}>
-                <Text onPress={Actions.pageThree}>This is Page Two!</Text>
+                <Text onPress={Actions.pageThree}>This is Page Four!</Text>
             </View>
         )
     }
