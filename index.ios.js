@@ -16,6 +16,7 @@ import {
     ListView
 } from 'react-native';
 import _ from 'lodash';
+import {observable, autorun} from 'mobx';
 
 const {height, width} = Dimensions.get('window');
 
