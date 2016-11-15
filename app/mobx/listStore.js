@@ -5,7 +5,7 @@ let index = 0;
 class ObservableListStore {
     @observable list = [];
 
-    addListItem(item) {
+    addList(item) {
         this.list.push({
             name: item,
             items:[],
@@ -14,7 +14,7 @@ class ObservableListStore {
         index ++;
     }
 
-    removeListItem(item) {
+    removeList(item) {
         this.list = this.list.filter((l) => {
             return l.index !== item.index;
         })

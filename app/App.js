@@ -16,14 +16,14 @@ class TodoList extends Component {
         this.setState({ showInput: !this.state.showInput })
     }
     addListItem () {
-        this.props.store.addListItem(this.state.text)
+        this.props.store.addList(this.state.text)
         this.setState({
             text: '',
             showInput: !this.state.showInput
         })
     }
     removeListItem (item) {
-        this.props.store.removeListItem(item)
+        this.props.store.removeList(item)
     }
     updateText (text) {
         this.setState({text})
