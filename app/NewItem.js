@@ -1,28 +1,41 @@
+import React, {Component} from 'react'
+import {View, Text, StyleSheet, TextInput, TouchableHighlight} from 'react-native'
+import {observer} from 'mobx-react/native';
 
-import React, { Component } from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableHighlight } from 'react-native'
 
+@observer
 class NewItem extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props)
         this.state = {
             newItem: ''
         }
     }
-    addItem () {
-        if (this.state.newItem === '') return
+
+    addItem() {
+        if (this.state.newItem === '') return;
+        console.log('calling',this.state.newItem);
         this.props.store.addItem(this.props.item, this.state.newItem)
         this.setState({
             newItem: ''
         })
     }
-    updateNewItem (text) {
+
+    deleteTodoItem(i) {
+        console.log('i', i);
+        console.log('item', this.props.item);
+        this.props.store.deleteTodoItem(this.props.item, i);
+    }
+
+    updateNewItem(text) {
         this.setState({
             newItem: text
         })
     }
-    render () {
-        const { item } = this.props
+
+
+    render() {
+        const {item} = this.props;
         return (
             <View style={{flex: 1}}>
                 <View style={styles.heading}>
@@ -32,12 +45,23 @@ class NewItem extends Component {
                         style={styles.closeButton}>×</Text>
                 </View>
                 {!item.items.length && <NoItems />}
-                {item.items.length ? <Items items={item.items} /> : <View />}
+                {item.items.length ? <View style={{flex: 1, paddingTop: 10}}>
+                    {item.items.map((todoItem, i) => {
+                        return <View key={i} style={styles.itemContainer}>
+                            <Text
+                                style={styles.item}>{todoItem}</Text>
+                            <Text
+                                style={styles.deleteItem}
+                                onPress={this.deleteTodoItem.bind(this, i)}>Remove</Text>
+                        </View>
+                    })
+                    }
+                </View> : <View />}
                 <View style={{flexDirection: 'row'}}>
                     <TextInput
                         value={this.state.newItem}
                         onChangeText={(text) => this.updateNewItem(text)}
-                        style={styles.input} />
+                        style={styles.input}/>
                     <TouchableHighlight
                         onPress={this.addItem.bind(this)}
                         style={styles.button}>
@@ -104,11 +128,23 @@ const styles = StyleSheet.create({
         fontSize: 22,
         color: '#156e9a'
     },
+    itemContainer: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#ededed',
+        flexDirection: 'row'
+    },
     item: {
         color: '#156e9a',
-        padding: 10,
-        fontSize: 20,
-        paddingLeft: 20
+        fontSize: 18,
+        flex: 3,
+        padding: 20
+    },
+    deleteItem: {
+        flex: 1,
+        padding: 20,
+        color: '#a3a3a3',
+        fontWeight: 'bold',
+        marginTop: 3
     }
 })
 

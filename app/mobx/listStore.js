@@ -8,10 +8,10 @@ class ObservableListStore {
     addList(item) {
         this.list.push({
             name: item,
-            items:[],
+            items: [],
             index
         });
-        index ++;
+        index++;
     }
 
     removeList(item) {
@@ -20,10 +20,22 @@ class ObservableListStore {
         })
     }
 
-    addItem(item,name) {
+    addItem(item, name) {
         this.list.forEach((l) => {
-            if(l.index === item.index) {
+            if (l.index === item.index) {
+                console.log('oh yes?');
+
                 l.items.push(name);
+            }
+        })
+    }
+
+    deleteTodoItem(item, i) {
+        console.log('item', item);
+        console.log('i', i);
+        this.list.forEach((l) => {
+            if (l.index === item.index) {
+                l.items.splice(i, 1);
             }
         })
     }
