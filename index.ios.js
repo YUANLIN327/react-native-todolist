@@ -17,6 +17,7 @@ import {
     ListView,
     Navigator
 } from 'react-native';
+import ListStore from './app/mobx/listStore';
 
 class TodoList extends Component {
    renderScene (route, navigator) {
