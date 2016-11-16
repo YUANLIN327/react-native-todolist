@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, TextInput, TouchableHighlight} from 'react-native'
 import {observer} from 'mobx-react/native';
+import TodoItem from './TodoItem';
 
 
 @observer
@@ -14,7 +15,7 @@ class NewItem extends Component {
 
     addItem() {
         if (this.state.newItem === '') return;
-        console.log('calling',this.state.newItem);
+        console.log('calling', this.state.newItem);
         this.props.store.addItem(this.props.item, this.state.newItem)
         this.setState({
             newItem: ''
@@ -47,13 +48,8 @@ class NewItem extends Component {
                 {!item.items.length && <NoItems />}
                 {item.items.length ? <View style={{flex: 1, paddingTop: 10}}>
                     {item.items.map((todoItem, i) => {
-                        return <View key={i} style={styles.itemContainer}>
-                            <Text
-                                style={styles.item}>{todoItem}</Text>
-                            <Text
-                                style={styles.deleteItem}
-                                onPress={this.deleteTodoItem.bind(this, i)}>Remove</Text>
-                        </View>
+                        return <TodoItem key={Math.random()} text={todoItem} index={i}
+                                         deleteTodoItem={this.deleteTodoItem.bind(this, i)}/>
                     })
                     }
                 </View> : <View />}
@@ -146,6 +142,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 3
     }
-})
+});
 
 export default NewItem
